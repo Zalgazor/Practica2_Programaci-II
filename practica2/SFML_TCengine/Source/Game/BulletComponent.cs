@@ -44,6 +44,8 @@ namespace TCGame
                     if (IsActorInRange(collisionLayerComponent.Owner))
                     {
                         // TODO (1): Destroy both actors, the bullet actor and the collision layer actor
+                        Owner.Destroy();
+                        collisionLayerComponent.Owner.Destroy();
                     }
                 }
             }
@@ -52,6 +54,10 @@ namespace TCGame
         private bool IsActorInRange(Actor _actor)
         {
             // TODO (1): Implement this method. It returns true if this actor is touching the _actor passed by parameter
+            if (_actor.GetGlobalBounds().Contains(Owner.GetPosition().X, Owner.GetPosition().Y))
+            {
+                return true;
+            }
             return false;
         }
 

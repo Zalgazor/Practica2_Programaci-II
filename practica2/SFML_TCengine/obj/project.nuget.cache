@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zZAtDC550WWZQYBmH+cYEzOZT1YxxIZ6mHTP1u6lOfgEuwbDERNsXaAg9lTe8vzDfZtlmmQRs4NFj1gabiqnzQ==",
+  "dgSpecHash": "SrWb7E6KHH8/dcaGozH9CNyrh0EVurW8qdDWm7JUPuHyqTPXMjAnKHzGZDKArcbvLON2dx4KkJCJYLLXiOhTUw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
+  "projectFilePath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\pràctica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\AlexS\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512",
     "C:\\Users\\AlexS\\.nuget\\packages\\sfml.audio\\2.5.0\\sfml.audio.2.5.0.nupkg.sha512",

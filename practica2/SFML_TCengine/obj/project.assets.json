@@ -450,11 +450,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
+      "projectUniqueName": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\pràctica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
       "projectName": "SFML_TCengine",
-      "projectPath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
+      "projectPath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\pràctica2\\practica2\\SFML_TCengine\\SFML_TCengine.csproj",
       "packagesPath": "C:\\Users\\AlexS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\practica2\\SFML_TCengine\\obj\\",
+      "outputPath": "C:\\Users\\AlexS\\Desktop\\3r trimestre\\Programació II\\Tasques a entregar\\practica2\\pràctica2\\practica2\\SFML_TCengine\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
