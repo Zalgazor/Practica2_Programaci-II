@@ -134,6 +134,12 @@ namespace TCGame
                     // - BulletComponent
                     // - OutOfWindowDestructionComponent
                     // and add the actor to the Scene
+
+                    missileActor.AddComponent<ForwardMovementComponent>();
+                    missileActor.AddComponent<BulletComponent>(m_ImpactLayers);
+                    missileActor.AddComponent<OutOfWindowDestructionComponent>();
+
+                    TecnoCampusEngine.Get.Scene.CreateActor(missileActor);
                 }
 
                 m_TimeToShoot = m_FireRate;
