@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\practica2",
+    "\\practica2\\SFML_TCengine",
+    "\\practica2\\SFML_TCengine\\Source",
+    "\\practica2\\SFML_TCengine\\Source\\Game"
   ],
-  "SelectedNode": "\\SFML_TCengine.sln",
   "PreviewInSolutionExplorer": false
 }

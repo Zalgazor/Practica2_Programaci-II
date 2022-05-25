@@ -8,6 +8,8 @@ namespace TCGame
     {
 
         private const float MOVEMENT_SPEED = 200f;
+        private TransformComponent transformComponent;
+        private CannonComponent cannonComponent;
 
         public CharacterControllerComponent()
         {
@@ -16,6 +18,13 @@ namespace TCGame
         public override EComponentUpdateCategory GetUpdateCategory()
         {
             return BaseComponent.EComponentUpdateCategory.PreUpdate;
+        }
+
+        public override void OnActorCreated()
+        {
+            base.OnActorCreated();
+            transformComponent = Owner.GetComponent<TransformComponent>();
+            cannonComponent = Owner.GetComponent<CannonComponent>();
         }
 
         public override void Update(float _dt)
@@ -36,29 +45,26 @@ namespace TCGame
             if (_keyEvent.Code == Keyboard.Key.W)
             {
                 Vector2f up = new Vector2f(0, 1);
-                actor.GetComponent<ForwardMovementComponent>(MOVEMENT_SPEED, up);
+                transformComponent.Transform.Position += up;
             }
             else if (_keyEvent.Code == Keyboard.Key.A)
             {
                 Vector2f left = new Vector2f(-1, 0);
-                actor.GetComponent<ForwardMovementComponent>(MOVEMENT_SPEED, left);
+                transformComponent.Transform.Position += left;
             }
             else if (_keyEvent.Code == Keyboard.Key.S)
             {
                 Vector2f down = new Vector2f(0, -1);
-                actor.GetComponent<ForwardMovementComponent>(MOVEMENT_SPEED, down);
+                transformComponent.Transform.Position += down;
             }
             else if (_keyEvent.Code == Keyboard.Key.D)
             {
                 Vector2f right = new Vector2f(1, 0);
-                actor.GetComponent<ForwardMovementComponent>(MOVEMENT_SPEED, right);
+                transformComponent.Transform.Position += right;
             }
             else if (_keyEvent.Code == Keyboard.Key.Space)
             {
-                if ()
-                {
-                    actor.GetComponent<CannonComponent>().Shoot();
-                }
+                cannonComponent.Shoot();
             }
         }
     }
