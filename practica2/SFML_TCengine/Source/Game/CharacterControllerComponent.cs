@@ -45,26 +45,34 @@ namespace TCGame
             if (_keyEvent.Code == Keyboard.Key.W)
             {
                 Vector2f up = new Vector2f(0, 1);
-                transformComponent.Transform.Position += up;
+                transformComponent.Transform.Position += up * MOVEMENT_SPEED;
             }
             else if (_keyEvent.Code == Keyboard.Key.A)
             {
                 Vector2f left = new Vector2f(-1, 0);
-                transformComponent.Transform.Position += left;
+                transformComponent.Transform.Position += left * MOVEMENT_SPEED;
             }
             else if (_keyEvent.Code == Keyboard.Key.S)
             {
                 Vector2f down = new Vector2f(0, -1);
-                transformComponent.Transform.Position += down;
+                transformComponent.Transform.Position += down * MOVEMENT_SPEED;
             }
             else if (_keyEvent.Code == Keyboard.Key.D)
             {
                 Vector2f right = new Vector2f(1, 0);
-                transformComponent.Transform.Position += right;
+                transformComponent.Transform.Position += right * MOVEMENT_SPEED;
             }
             else if (_keyEvent.Code == Keyboard.Key.Space)
             {
-                cannonComponent.Shoot();
+                try
+                {
+                    cannonComponent.Shoot();
+                }
+                catch
+                {
+
+                }
+ 
             }
         }
     }
