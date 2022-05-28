@@ -135,7 +135,7 @@ namespace TCGame
                     // - OutOfWindowDestructionComponent
                     // and add the actor to the Scene
 
-                    missileActor.AddComponent<ForwardMovementComponent>();
+                    missileActor.AddComponent<ForwardMovementComponent>(m_BulletSpeed, m_CannonDirection);
                     missileActor.AddComponent<BulletComponent>(m_ImpactLayers);
                     missileActor.AddComponent<OutOfWindowDestructionComponent>();
 

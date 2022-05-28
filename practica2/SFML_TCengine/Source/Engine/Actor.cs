@@ -50,7 +50,7 @@ namespace TCEngine
             return component;
         }
 
-                public void AddComponentUnsafe(BaseComponent _component)
+        public void AddComponentUnsafe(BaseComponent _component)
         {
             Type baseComponentType = typeof(BaseComponent);
             Debug.Assert(_component.GetType() != baseComponentType);

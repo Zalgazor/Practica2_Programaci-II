@@ -8,7 +8,8 @@ namespace TCGame
     public class PatrolMovementComponent : BaseComponent
     {
         private const float TIEMPO_MOVIMIENTO_ALEATORIO = 2.0f;
-        private List<Actor> actors = TecnoCampusEngine.Get.Scene.GetAllActors();
+        private const float TIEMPO_Abducir = 2.0f;
+        private List<Actor> humanActors = new List<Actor>();
         private enum EState
         {
             MovimientoAleatorio,
@@ -42,11 +43,11 @@ namespace TCGame
                     UpdateSeleccionarObjetivo();
                     break;
                 case EState.MoverseHaciaObjetivo:
-                    UpdateMoverseHaciaObjetivo();
+                    UpdateMoverseHaciaObjetivo(_dt);
                     break;
 
                 case EState.Abducir:
-                    UpdateAbducir();
+                    UpdateAbducir(_dt);
                     break;
             }
         }
@@ -63,28 +64,48 @@ namespace TCGame
 
         private void UpdateSeleccionarObjetivo()
         {
-            foreach (T in actors)
+            for (int i = 0; i > TecnoCampusEngine.Get.Scene.GetAllActors().Count; i++)
             {
+                if (TecnoCampusEngine.Get.Scene.GetAllActors()[i].GetComponent<TargetableComponent>().TargetableComponentConfirmation() == true)
+                {
+                    humanActors.Add(TecnoCampusEngine.Get.Scene.GetAllActors()[i]);
+                }
+            }
 
-            }
-            try
+           for (int i = 0; i > humanActors.Count; i++)
             {
-                ChangeState(EState.MoverseHaciaObjetivo);
+                if (humanActors[i] != null)
+                {
+                    target = humanActors[i];
+                    break;
+                }
             }
-            catch
-            {
-
-            }
+            
+            ChangeState(EState.MoverseHaciaObjetivo);
 
         }
 
-        private void UpdateMoverseHaciaObjetivo()
+        private void UpdateMoverseHaciaObjetivo(float _dt)
         {
-            Vector2f targetDirection = ;
+
+            Vector2f targetDirection = (target.GetPosition() - Owner.GetPosition()).Normal();
+            OvniTransformComponent.Transform.Position = OvniTransformComponent.Transform.Position + (targetDirection * 5f * _dt);
+
+            if (OvniTransformComponent.Transform.Position == target.GetPosition())
+            {
+                ChangeState(EState.Abducir);
+            }
         }
 
-        private void UpdateAbducir()
+        private void UpdateAbducir(float _dt)
         {
+            m_CurrentStateTime += _dt;
+
+            if (m_CurrentStateTime >= TIEMPO_Abducir)
+            {
+                target.Destroy();
+                ChangeState(EState.MovimientoAleatorio);
+            }
 
         }
 
@@ -117,14 +138,14 @@ namespace TCGame
             switch (_previousState)
             {
                 case EState.MovimientoAleatorio:
-                    m_CurrentState = 0.0f;
+                    m_CurrentStateTime = 0.0f;
                     break;
-                case EState.SeleccionarObjetivo:
-                    
+                case EState.SeleccionarObjetivo:                    
                     break;
                 case EState.MoverseHaciaObjetivo:
                     break;
                 case EState.Abducir:
+                    m_CurrentStateTime = 0.0f;
                     break;
                 default:
                     break;
@@ -135,6 +156,11 @@ namespace TCGame
         {
             PatrolMovementComponent clonedComponent = new PatrolMovementComponent();
             return clonedComponent;
+        }
+
+        public override EComponentUpdateCategory GetUpdateCategory()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

@@ -31,49 +31,38 @@ namespace TCGame
         {
             base.Update(_dt);
 
-            
+            if (Keyboard.IsKeyPressed(Keyboard.Key.W))
+            {
+                Vector2f up = new Vector2f(0, -1);
+                transformComponent.Transform.Position += up * MOVEMENT_SPEED * _dt;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.A))
+            {
+                Vector2f left = new Vector2f(-1, 0);
+                transformComponent.Transform.Position += left * MOVEMENT_SPEED * _dt;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.S))
+            {
+                Vector2f down = new Vector2f(0, 1);
+                transformComponent.Transform.Position += down * MOVEMENT_SPEED * _dt;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+            {
+                Vector2f right = new Vector2f(1, 0);
+                transformComponent.Transform.Position += right * MOVEMENT_SPEED * _dt;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && cannonComponent != null)
+            {
+                cannonComponent.Shoot();
+            }
+
+
             // TODO (3): Implement the keyboard handling
             //   - Pressing W moves the Actor up
             //   - Pressing S moves the Actor down
             //   - Pressing A moves the Actor to the left
             //   - Pressing D moves the Actor to the right
             //   - Pressing Space shoots the cannon of this actor (only if this actor has a CannonComponent)
-        }
-
-        public void HandleKeyPressed(object _sender, KeyEventArgs _keyEvent, Actor actor)
-        {
-            if (_keyEvent.Code == Keyboard.Key.W)
-            {
-                Vector2f up = new Vector2f(0, 1);
-                transformComponent.Transform.Position += up * MOVEMENT_SPEED;
-            }
-            else if (_keyEvent.Code == Keyboard.Key.A)
-            {
-                Vector2f left = new Vector2f(-1, 0);
-                transformComponent.Transform.Position += left * MOVEMENT_SPEED;
-            }
-            else if (_keyEvent.Code == Keyboard.Key.S)
-            {
-                Vector2f down = new Vector2f(0, -1);
-                transformComponent.Transform.Position += down * MOVEMENT_SPEED;
-            }
-            else if (_keyEvent.Code == Keyboard.Key.D)
-            {
-                Vector2f right = new Vector2f(1, 0);
-                transformComponent.Transform.Position += right * MOVEMENT_SPEED;
-            }
-            else if (_keyEvent.Code == Keyboard.Key.Space)
-            {
-                try
-                {
-                    cannonComponent.Shoot();
-                }
-                catch
-                {
-
-                }
- 
-            }
         }
     }
 }
