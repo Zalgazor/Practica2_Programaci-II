@@ -17,13 +17,9 @@ namespace TCGame
             return EComponentUpdateCategory.Update;
         }
 
-        public bool TargetableComponentConfirmation()
-        {
-            return true;
-        }
-
         public TargetableComponent()
         {
+
         }
 
         public override object Clone()

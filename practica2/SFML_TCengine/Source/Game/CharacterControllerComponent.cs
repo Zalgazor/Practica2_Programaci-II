@@ -31,6 +31,13 @@ namespace TCGame
         {
             base.Update(_dt);
 
+            // TODO (3): Implement the keyboard handling
+            //   - Pressing W moves the Actor up
+            //   - Pressing S moves the Actor down
+            //   - Pressing A moves the Actor to the left
+            //   - Pressing D moves the Actor to the right
+            //   - Pressing Space shoots the cannon of this actor (only if this actor has a CannonComponent)
+
             if (Keyboard.IsKeyPressed(Keyboard.Key.W))
             {
                 Vector2f up = new Vector2f(0, -1);
@@ -55,14 +62,6 @@ namespace TCGame
             {
                 cannonComponent.Shoot();
             }
-
-
-            // TODO (3): Implement the keyboard handling
-            //   - Pressing W moves the Actor up
-            //   - Pressing S moves the Actor down
-            //   - Pressing A moves the Actor to the left
-            //   - Pressing D moves the Actor to the right
-            //   - Pressing Space shoots the cannon of this actor (only if this actor has a CannonComponent)
         }
     }
 }

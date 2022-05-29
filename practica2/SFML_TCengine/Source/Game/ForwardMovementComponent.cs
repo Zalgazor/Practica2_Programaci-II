@@ -13,16 +13,32 @@ namespace TCGame
     {
         private Vector2f m_Forward;
         private float m_Speed;
+        private const float DEFAULT_SPEED = 10.0f;
+        private Vector2f DEFAULT_FORWARD_VECTOR = new Vector2f(0, 1);
+        private TransformComponent m_TransformComponent;
 
         public Vector2f Forward
         {
             get => m_Forward;
             set => m_Forward = value;
         }
-        ForwardMovementComponent(float m_Speed, Vector2f m_Forward)
+
+        public ForwardMovementComponent()
+        {
+            m_Forward = DEFAULT_FORWARD_VECTOR;
+            m_Speed = DEFAULT_SPEED;
+        }
+        public ForwardMovementComponent(float m_Speed, Vector2f m_Forward)
         {
             this.m_Forward = m_Forward;
             this.m_Speed = m_Speed;
+        }
+
+        public override void OnActorCreated()
+        {
+            base.OnActorCreated();
+
+            m_TransformComponent = Owner.GetComponent<TransformComponent>();
         }
 
         public override void Update(float _dt)
@@ -47,5 +63,6 @@ namespace TCGame
             return clonedComponent;
         }
     }
+
 
 }

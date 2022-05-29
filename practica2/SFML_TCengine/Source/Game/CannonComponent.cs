@@ -19,7 +19,7 @@ namespace TCGame
         private Vector2f m_CannonDirection;
         private float m_FireRate;
         private float m_TimeToShoot;
-        private string m_BulletTextureName;
+        private string m_BulletTextureName = "Data/Textures/Bullets/TankBullet.png";
         private int m_BulletsPerShot = DEFAULT_BULLETS_PER_SHOT;
         private float m_BulletSpeed = DEFAULT_BULLET_SPEED;
         private float m_MultipleBulletsOffset = DEFAULT_MULTIPLE_BULLETS_OFFSET;
@@ -134,7 +134,6 @@ namespace TCGame
                     // - BulletComponent
                     // - OutOfWindowDestructionComponent
                     // and add the actor to the Scene
-
                     missileActor.AddComponent<ForwardMovementComponent>(m_BulletSpeed, m_CannonDirection);
                     missileActor.AddComponent<BulletComponent>(m_ImpactLayers);
                     missileActor.AddComponent<OutOfWindowDestructionComponent>();

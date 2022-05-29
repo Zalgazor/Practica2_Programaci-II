@@ -1,15 +1,27 @@
 ﻿using SFML.System;
 using System.Diagnostics;
+using System;
 using System.Collections.Generic;
 using TCEngine;
 
 namespace TCGame
 {
+
+    // TODO (6): Create a PatrolMovementComponent (or better name, as you wish)
+    //  - This component must move the UFOs to patrol and look for people to trap
+    //  - You can implement it as a FSM
+
     public class PatrolMovementComponent : BaseComponent
     {
+        public Random rnd = new Random();
         private const float TIEMPO_MOVIMIENTO_ALEATORIO = 2.0f;
         private const float TIEMPO_Abducir = 2.0f;
         private List<Actor> humanActors = new List<Actor>();
+        private const float DEFAULT_SPEED = 120.0f;
+        private const float DEFAULT_RANGE = 1000f;
+        public float m_OvniSpeed;
+        public float m_OvniRange;
+
         private enum EState
         {
             MovimientoAleatorio,
@@ -23,13 +35,26 @@ namespace TCGame
         private Actor target;
         private TransformComponent OvniTransformComponent;
 
-        public PatrolMovementComponent()
+        public PatrolMovementComponent(float _speed, float _range)
         {
+            m_OvniSpeed = _speed;
+            m_OvniRange = _range;
             m_CurrentState = EState.MovimientoAleatorio;
-            OvniTransformComponent = Owner.GetComponent<TransformComponent>();
-
         }
 
+        public PatrolMovementComponent()
+        {
+            m_OvniSpeed = DEFAULT_SPEED;
+            m_OvniRange = DEFAULT_RANGE;
+            m_CurrentState = EState.MovimientoAleatorio;
+        }
+
+        public override void OnActorCreated()
+        {
+            base.OnActorCreated();
+
+            OvniTransformComponent = Owner.GetComponent<TransformComponent>();
+        }
         public override void Update(float _dt)
         {
             base.Update(_dt);
@@ -56,6 +81,12 @@ namespace TCGame
         {
             m_CurrentStateTime += _dt;
 
+            int _newPosX = rnd.Next(0, (int)TecnoCampusEngine.Get.Window.Size.X);
+            int _newPosY = rnd.Next(0, (int)TecnoCampusEngine.Get.Window.Size.Y);
+            Vector2f vector = new Vector2f(_newPosX, _newPosY);
+
+            OvniTransformComponent.Transform.Position += ((Owner.GetPosition() - vector).Normal() * m_OvniSpeed * _dt);
+
             if (m_CurrentStateTime >= TIEMPO_MOVIMIENTO_ALEATORIO)
             {
                 ChangeState(EState.SeleccionarObjetivo);
@@ -64,24 +95,26 @@ namespace TCGame
 
         private void UpdateSeleccionarObjetivo()
         {
+            
             for (int i = 0; i > TecnoCampusEngine.Get.Scene.GetAllActors().Count; i++)
             {
-                if (TecnoCampusEngine.Get.Scene.GetAllActors()[i].GetComponent<TargetableComponent>().TargetableComponentConfirmation() == true)
+                TargetableComponent targetableComponent = TecnoCampusEngine.Get.Scene.GetAllActors()[i].GetComponent<TargetableComponent>();
+                if (targetableComponent != null)
                 {
                     humanActors.Add(TecnoCampusEngine.Get.Scene.GetAllActors()[i]);
                 }
             }
 
-           for (int i = 0; i > humanActors.Count; i++)
+            if (HumanIsInRange())
             {
-                if (humanActors[i] != null)
-                {
-                    target = humanActors[i];
-                    break;
-                }
+                target = ReturnNearestHumanActor();
+                ChangeState(EState.MoverseHaciaObjetivo);
             }
-            
-            ChangeState(EState.MoverseHaciaObjetivo);
+            else
+            {
+                ChangeState(EState.MovimientoAleatorio);
+            }
+
 
         }
 
@@ -89,7 +122,7 @@ namespace TCGame
         {
 
             Vector2f targetDirection = (target.GetPosition() - Owner.GetPosition()).Normal();
-            OvniTransformComponent.Transform.Position = OvniTransformComponent.Transform.Position + (targetDirection * 5f * _dt);
+            OvniTransformComponent.Transform.Position = OvniTransformComponent.Transform.Position + (targetDirection * m_OvniSpeed * _dt);
 
             if (OvniTransformComponent.Transform.Position == target.GetPosition())
             {
@@ -103,10 +136,56 @@ namespace TCGame
 
             if (m_CurrentStateTime >= TIEMPO_Abducir)
             {
-                target.Destroy();
+                TecnoCampusEngine.Get.Scene.Destroy(target);
                 ChangeState(EState.MovimientoAleatorio);
             }
 
+        }
+
+        private bool HumanIsInRange()
+        {
+            for (int i = 0; i < humanActors.Count; i++)
+            {
+                if (HumanIsNotOutOfWindow(humanActors[i]))
+                {
+                    if ((humanActors[i].GetPosition() - Owner.GetPosition()).Size() < m_OvniRange)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private Actor ReturnNearestHumanActor()
+        {
+            Actor nearestActor = new Actor("humanTarget");
+            float range = m_OvniRange;
+
+            for (int i = 0; i < humanActors.Count; i++)
+            {
+                if (HumanIsNotOutOfWindow(humanActors[i]))
+                {
+                    if ((humanActors[i].GetPosition() - Owner.GetPosition()).Size() < range)
+                    {
+                        range = humanActors[i].GetPosition().Size();
+                        nearestActor = humanActors[i];
+                    }
+                }
+            }
+
+            return nearestActor;
+        }
+
+        private bool HumanIsNotOutOfWindow(Actor _human)
+        {
+            if (_human.GetPosition().X < TecnoCampusEngine.WINDOW_WIDTH && _human.GetPosition().Y < TecnoCampusEngine.WINDOW_HEIGHT)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void ChangeState(EState _newState)
@@ -122,6 +201,7 @@ namespace TCGame
             switch (_nextState)
             {
                 case EState.MovimientoAleatorio:
+                    humanActors = null;
                     break;
                 case EState.SeleccionarObjetivo:
                     break;
@@ -140,12 +220,13 @@ namespace TCGame
                 case EState.MovimientoAleatorio:
                     m_CurrentStateTime = 0.0f;
                     break;
-                case EState.SeleccionarObjetivo:                    
+                case EState.SeleccionarObjetivo:
                     break;
                 case EState.MoverseHaciaObjetivo:
                     break;
                 case EState.Abducir:
                     m_CurrentStateTime = 0.0f;
+                    target = null;
                     break;
                 default:
                     break;
@@ -160,12 +241,9 @@ namespace TCGame
 
         public override EComponentUpdateCategory GetUpdateCategory()
         {
-            throw new System.NotImplementedException();
+            return EComponentUpdateCategory.Update;
         }
     }
 
-    // TODO (6): Create a PatrolMovementComponent (or better name, as you wish)
-    //  - This component must move the UFOs to patrol and look for people to trap
-    //  - You can implement it as a FSM
 
 }

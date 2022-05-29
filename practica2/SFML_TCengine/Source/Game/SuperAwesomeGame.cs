@@ -45,10 +45,13 @@ namespace TCGame
             //   - CharacterControllerComponent
             //   - CannonComponent
 
-            Vector2f cannonDirection = new Vector2f(0, 1);
-
             mainCharacterActor.AddComponent<CharacterControllerComponent>();
-            mainCharacterActor.AddComponent<CannonComponent>(cannonDirection);
+            CannonComponent mainCharacterCannon = mainCharacterActor.AddComponent<CannonComponent>(enemyLayers, planeForward);
+            mainCharacterCannon.AutomaticFire = false;
+            mainCharacterCannon.FireRate = 0.4f;
+            mainCharacterCannon.BulletsPerShot = 2;
+            mainCharacterCannon.MultipleBulletsOffset = 100.0f;
+            mainCharacterCannon.BulletTextureName = "Data/Textures/Bullets/PlaneBullet.png";
 
             TecnoCampusEngine.Get.Scene.CreateActor(mainCharacterActor);
 
@@ -60,8 +63,7 @@ namespace TCGame
             //   - ParentActorComponent
 
             planeCloudGasActor.AddComponent<AnimatedSpriteComponent>("Textures/FX/PlaneCloudGas", 4u, 1u);
-            planeCloudGasActor.AddComponent<ParentActorComponent>(mainCharacterActor, new Vector2f (0,1));
-
+            planeCloudGasActor.AddComponent<ParentActorComponent>(mainCharacterActor, new Vector2f(0, 50));
 
             TecnoCampusEngine.Get.Scene.CreateActor(planeCloudGasActor);
         }
@@ -100,8 +102,8 @@ namespace TCGame
             // TODO (8): Fix the spawn position for the tanks
             //    - They should spawn on the right side of the window
 
-            spawnerComponent.m_MinPosition = new Vector2f(1180, 0);
-            spawnerComponent.m_MaxPosition = new Vector2f(1194, 0);
+            spawnerComponent.m_MinPosition = new Vector2f(0, 0);
+            spawnerComponent.m_MaxPosition = new Vector2f(TecnoCampusEngine.WINDOW_WIDTH, 0);
             spawnerComponent.m_MinTime = 0.5f;
             spawnerComponent.m_MaxTime = 5f;
             spawnerComponent.Reset();
@@ -109,7 +111,8 @@ namespace TCGame
             Vector2f tankForward = new Vector2f(0.0f, 1.0f);
             List<CollisionLayerComponent.ECollisionLayers> tankEnemyLayers = new List<CollisionLayerComponent.ECollisionLayers>();
             tankEnemyLayers.Add(CollisionLayerComponent.ECollisionLayers.Person);
-            float tankSpeed = 5.0f;
+
+            float tankSpeed = 250.0f;
             Vector2f cannonDirection = new Vector2f(0, 1);
 
             for (int i = 1; i <= 2; ++i)
@@ -123,9 +126,9 @@ namespace TCGame
                 //   - ForwardMovementComponent
                 //   - CannonComponent (remember to use the correct texture)
 
-                
-                tankPrefab.AddComponent<ForwardMovementComponent>(tankSpeed , tankForward);
-                tankPrefab.AddComponent<CannonComponent>(cannonDirection);
+                tankPrefab.AddComponent<ForwardMovementComponent>(tankSpeed, cannonDirection);
+                CannonComponent tankCannon = tankPrefab.AddComponent<CannonComponent>(tankEnemyLayers, cannonDirection);
+                tankCannon.BulletTextureName = "Data/Textures/Bullets/TankBullet.png";
 
                 tankPrefab.AddComponent<OutOfWindowDestructionComponent>();
                 tankPrefab.AddComponent<CollisionLayerComponent>(CollisionLayerComponent.ECollisionLayers.Enemy);
@@ -146,8 +149,8 @@ namespace TCGame
             //    - They should spawn on the right side of the window
             //    - They should spawn every 2 or 3 seconds aprox
 
-            spawnerComponent.m_MinPosition = new Vector2f(TecnoCampusEngine.Get.ViewportSize.X + 1180, TecnoCampusEngine.Get.ViewportSize.Y - 825);
-            spawnerComponent.m_MaxPosition = new Vector2f(TecnoCampusEngine.Get.ViewportSize.X + 1194, TecnoCampusEngine.Get.ViewportSize.Y - 825);
+            spawnerComponent.m_MinPosition = new Vector2f(TecnoCampusEngine.Get.ViewportSize.X + 10, 0);
+            spawnerComponent.m_MaxPosition = new Vector2f(TecnoCampusEngine.Get.ViewportSize.X + 10, TecnoCampusEngine.Get.ViewportSize.Y - 10);
             spawnerComponent.m_MinTime = 2.0f;
             spawnerComponent.m_MaxTime = 3.0f;
             spawnerComponent.Reset();
@@ -185,7 +188,6 @@ namespace TCGame
             spriteComponent.m_RenderLayer = RenderComponent.ERenderLayer.Background;
 
             TecnoCampusEngine.Get.Scene.CreateActor(backgroundActor);
-
         }
 
     }

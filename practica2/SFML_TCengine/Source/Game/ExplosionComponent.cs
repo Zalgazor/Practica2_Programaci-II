@@ -28,12 +28,13 @@ namespace TCGame
                 //  - AnimatedSpriteComponent (you can Use the Explosion texture from the FX folder)
                 //  - TimeToDieComponent
                 //  - ForwardMovementComponent (optional) -> You can add it if you want, to add a very subtle movement
+
                 Actor explosionActor = new Actor("ExplosionActor");
                 TransformComponent explosionTransform = explosionActor.AddComponent<TransformComponent>();
                 AnimatedSpriteComponent explosionAnimation = explosionActor.AddComponent<AnimatedSpriteComponent>("Data/Textures/FX/Explosion.png", 4u, 1u);
                 explosionAnimation.Loop = false;
                 explosionActor.AddComponent<TimeToDieComponent>(1.0f);
-                explosionActor.AddComponent<ForwardMovementComponent>(Owner, new Vector2f(0,1));
+                explosionActor.AddComponent<ForwardMovementComponent>(Owner, new Vector2f(0, 1));
 
                 TecnoCampusEngine.Get.Scene.CreateActor(explosionActor);
             }
